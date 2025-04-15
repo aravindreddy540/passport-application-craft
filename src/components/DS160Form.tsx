@@ -14,16 +14,6 @@ import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/sonner';
 import api from '@/services/api';
 
-// Placeholder components that we'll implement later
-const ContactInfoForm = () => <div>Contact Information Form (To be implemented)</div>;
-const PassportInfoForm = () => <div>Passport Information Form (To be implemented)</div>;
-const TravelInfoForm = () => <div>Travel Information Form (To be implemented)</div>;
-const PreviousTravelForm = () => <div>Previous Travel Form (To be implemented)</div>;
-const EmploymentInfoForm = () => <div>Employment Information Form (To be implemented)</div>;
-const EducationInfoForm = () => <div>Education Information Form (To be implemented)</div>;
-const SecurityQuestionsForm = () => <div>Security Questions Form (To be implemented)</div>;
-const ReviewForm = () => <div>Review and Submit Form (To be implemented)</div>;
-
 const FormSteps = () => {
   const { currentStep, setCurrentStep, formData, updateFormData, formId, setFormId, isLoading, setIsLoading } = useFormContext();
   
@@ -84,11 +74,17 @@ const FormSteps = () => {
           setIsLoading(true);
           
           if (formId) {
-            // Update existing form
-            await api.updateApplication(formId, { ...formData, formStatus: 'draft' });
+            // Update existing form with formStatus field
+            await api.updateApplication(formId, { 
+              ...formData, 
+              formStatus: 'draft' as 'draft' | 'submitted' | 'approved' | 'rejected' 
+            });
           } else {
-            // Create new form
-            const result = await api.createApplication({ ...formData, formStatus: 'draft' });
+            // Create new form with formStatus field
+            const result = await api.createApplication({ 
+              ...formData, 
+              formStatus: 'draft' as 'draft' | 'submitted' | 'approved' | 'rejected' 
+            });
             setFormId(result._id);
           }
           
@@ -176,7 +172,10 @@ const FormSteps = () => {
               if (formId) {
                 try {
                   setIsLoading(true);
-                  await api.updateApplication(formId, { ...formData, formStatus: 'submitted' });
+                  await api.updateApplication(formId, { 
+                    ...formData, 
+                    formStatus: 'submitted' as 'draft' | 'submitted' | 'approved' | 'rejected' 
+                  });
                   toast.success('DS-160 form submitted successfully!');
                   // Reset or redirect user
                 } catch (error) {

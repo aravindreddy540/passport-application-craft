@@ -40,27 +40,35 @@ const formSchema = z.object({
 export const PreviousTravelForm = () => {
   const { formData, updateFormData } = useFormContext();
   
-  // Initialize form with current values
+  // Initialize form with current values ensuring required fields are present
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       previousUSTravel: formData.previousUSTravel || false,
-      previousUSTravelDetails: formData.previousUSTravelDetails || [],
+      previousUSTravelDetails: formData.previousUSTravelDetails && formData.previousUSTravelDetails.length > 0
+        ? formData.previousUSTravelDetails.map(entry => ({
+            arrivalDate: entry.arrivalDate || '',
+            departureDate: entry.departureDate || '',
+            lengthOfStay: entry.lengthOfStay || 0,
+          }))
+        : [],
     },
   });
   
   // Add a new empty travel entry
   const addTravelEntry = () => {
     const currentEntries = form.getValues('previousUSTravelDetails') || [];
-    form.setValue('previousUSTravelDetails', [
+    const newEntries = [
       ...currentEntries,
       { arrivalDate: '', departureDate: '', lengthOfStay: 0 }
-    ]);
+    ];
+    
+    form.setValue('previousUSTravelDetails', newEntries);
     
     // Update context data after adding
     updateFormData({
       previousUSTravel: form.getValues('previousUSTravel'),
-      previousUSTravelDetails: form.getValues('previousUSTravelDetails'),
+      previousUSTravelDetails: newEntries,
     });
   };
   
@@ -81,7 +89,15 @@ export const PreviousTravelForm = () => {
   
   // Save form data when it changes
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    updateFormData(values);
+    updateFormData({
+      previousUSTravel: values.previousUSTravel,
+      previousUSTravelDetails: values.previousUSTravelDetails ? 
+        values.previousUSTravelDetails.map(entry => ({
+          arrivalDate: entry.arrivalDate,
+          departureDate: entry.departureDate,
+          lengthOfStay: entry.lengthOfStay
+        })) : []
+    });
   };
   
   // Handle toggling previous travel

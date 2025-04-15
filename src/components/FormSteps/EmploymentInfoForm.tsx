@@ -47,7 +47,7 @@ const formSchema = z.object({
 export const EmploymentInfoForm = () => {
   const { formData, updateFormData } = useFormContext();
   
-  // Initialize form with current values
+  // Initialize form with current values with proper defaults for optional fields
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -68,7 +68,23 @@ export const EmploymentInfoForm = () => {
   
   // Save form data when it changes
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    updateFormData(values);
+    // Create a properly typed employer object
+    const employerData = values.employer ? {
+      name: values.employer.name || '',
+      phone: values.employer.phone || '',
+      address: {
+        street: values.employer.address?.street || '',
+        city: values.employer.address?.city || '',
+        state: values.employer.address?.state || '',
+        zipCode: values.employer.address?.zipCode || '',
+        country: values.employer.address?.country || '',
+      }
+    } : undefined;
+
+    updateFormData({
+      employmentStatus: values.employmentStatus,
+      employer: employerData
+    });
   };
   
   // Show employer details only for specific employment statuses

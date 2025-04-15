@@ -43,7 +43,7 @@ const api = {
   },
   
   // Create new application
-  createApplication: async (data: Partial<DS160FormData>): Promise<Application> => {
+  createApplication: async (data: Partial<DS160FormData> & { formStatus?: 'draft' | 'submitted' | 'approved' | 'rejected' }): Promise<Application> => {
     try {
       const response = await axios.post<ApiResponse<Application>>(`${API_URL}/applications`, data);
       return response.data.data;
@@ -54,7 +54,7 @@ const api = {
   },
   
   // Update application
-  updateApplication: async (id: string, data: Partial<DS160FormData & { formStatus?: string }>): Promise<Application> => {
+  updateApplication: async (id: string, data: Partial<DS160FormData> & { formStatus?: 'draft' | 'submitted' | 'approved' | 'rejected' }): Promise<Application> => {
     try {
       const response = await axios.put<ApiResponse<Application>>(`${API_URL}/applications/${id}`, data);
       return response.data.data;

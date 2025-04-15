@@ -53,13 +53,25 @@ const formSchema = z.object({
 export const EducationInfoForm = () => {
   const { formData, updateFormData } = useFormContext();
   
-  // Initialize form with current values
+  // Initialize form with current values or default values ensuring all required fields are present
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       educationLevel: formData.educationLevel || '',
       schools: formData.schools && formData.schools.length > 0 
-        ? formData.schools 
+        ? formData.schools.map(school => ({
+            name: school.name || '',
+            address: {
+              street: school.address?.street || '',
+              city: school.address?.city || '',
+              state: school.address?.state || '',
+              zipCode: school.address?.zipCode || '',
+              country: school.address?.country || '',
+            },
+            courseOfStudy: school.courseOfStudy || '',
+            fromDate: school.fromDate || '',
+            toDate: school.toDate || '',
+          }))
         : [{
             name: '',
             address: {

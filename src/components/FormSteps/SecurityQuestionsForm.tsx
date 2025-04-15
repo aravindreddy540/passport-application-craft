@@ -37,7 +37,7 @@ const formSchema = z.object({
 export const SecurityQuestionsForm = () => {
   const { formData, updateFormData } = useFormContext();
   
-  // Initialize form with current values
+  // Initialize form with current values ensuring all fields are present
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,7 +53,16 @@ export const SecurityQuestionsForm = () => {
   
   // Save form data when it changes
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    updateFormData(values);
+    // Ensure we pass all required fields with the correct types
+    updateFormData({
+      securityQuestions: {
+        criminalOffense: values.securityQuestions.criminalOffense,
+        drugOffense: values.securityQuestions.drugOffense,
+        terrorism: values.securityQuestions.terrorism,
+        visaFraud: values.securityQuestions.visaFraud,
+        explanations: values.securityQuestions.explanations || '',
+      }
+    });
   };
   
   // Check if any security question has 'Yes' answer
