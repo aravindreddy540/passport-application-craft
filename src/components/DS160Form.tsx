@@ -2,6 +2,14 @@
 import React, { useEffect } from 'react';
 import { FormProvider, useFormContext } from '@/context/FormContext';
 import { PersonalInfoForm } from './FormSteps/PersonalInfoForm';
+import { ContactInfoForm } from './FormSteps/ContactInfoForm';
+import { PassportInfoForm } from './FormSteps/PassportInfoForm';
+import { TravelInfoForm } from './FormSteps/TravelInfoForm';
+import { PreviousTravelForm } from './FormSteps/PreviousTravelForm';
+import { EmploymentInfoForm } from './FormSteps/EmploymentInfoForm';
+import { EducationInfoForm } from './FormSteps/EducationInfoForm';
+import { SecurityQuestionsForm } from './FormSteps/SecurityQuestionsForm';
+import { ReviewForm } from './FormSteps/ReviewForm';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/sonner';
 import api from '@/services/api';
