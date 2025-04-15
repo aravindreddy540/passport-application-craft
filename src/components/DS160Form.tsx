@@ -12,7 +12,7 @@ import { SecurityQuestionsForm } from './FormSteps/SecurityQuestionsForm';
 import { ReviewForm } from './FormSteps/ReviewForm';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/sonner';
-import api from '@/services/api';
+import api, { FormStatus } from '@/services/api';
 
 const FormSteps = () => {
   const { currentStep, setCurrentStep, formData, updateFormData, formId, setFormId, isLoading, setIsLoading } = useFormContext();
@@ -77,13 +77,13 @@ const FormSteps = () => {
             // Update existing form with formStatus field
             await api.updateApplication(formId, { 
               ...formData, 
-              formStatus: 'draft' as 'draft' | 'submitted' | 'approved' | 'rejected' 
+              formStatus: 'draft' as FormStatus
             });
           } else {
             // Create new form with formStatus field
             const result = await api.createApplication({ 
               ...formData, 
-              formStatus: 'draft' as 'draft' | 'submitted' | 'approved' | 'rejected' 
+              formStatus: 'draft' as FormStatus
             });
             setFormId(result._id);
           }
@@ -174,7 +174,7 @@ const FormSteps = () => {
                   setIsLoading(true);
                   await api.updateApplication(formId, { 
                     ...formData, 
-                    formStatus: 'submitted' as 'draft' | 'submitted' | 'approved' | 'rejected' 
+                    formStatus: 'submitted' as FormStatus
                   });
                   toast.success('DS-160 form submitted successfully!');
                   // Reset or redirect user

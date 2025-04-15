@@ -11,10 +11,13 @@ interface ApiResponse<T> {
   message?: string;
 }
 
+// Type for form status
+export type FormStatus = 'draft' | 'submitted' | 'approved' | 'rejected';
+
 // Type for application data with ID and status
 interface Application extends DS160FormData {
   _id: string;
-  formStatus: 'draft' | 'submitted' | 'approved' | 'rejected';
+  formStatus: FormStatus;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -43,7 +46,7 @@ const api = {
   },
   
   // Create new application
-  createApplication: async (data: Partial<DS160FormData> & { formStatus?: 'draft' | 'submitted' | 'approved' | 'rejected' }): Promise<Application> => {
+  createApplication: async (data: Partial<DS160FormData> & { formStatus?: FormStatus }): Promise<Application> => {
     try {
       const response = await axios.post<ApiResponse<Application>>(`${API_URL}/applications`, data);
       return response.data.data;
@@ -54,7 +57,7 @@ const api = {
   },
   
   // Update application
-  updateApplication: async (id: string, data: Partial<DS160FormData> & { formStatus?: 'draft' | 'submitted' | 'approved' | 'rejected' }): Promise<Application> => {
+  updateApplication: async (id: string, data: Partial<DS160FormData> & { formStatus?: FormStatus }): Promise<Application> => {
     try {
       const response = await axios.put<ApiResponse<Application>>(`${API_URL}/applications/${id}`, data);
       return response.data.data;
