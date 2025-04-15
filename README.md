@@ -1,73 +1,112 @@
-# Welcome to your Lovable project
 
-## Project info
+# DS-160 Visa Application System
 
-**URL**: https://lovable.dev/projects/46f50712-06a9-497b-a089-6323b7c55208
+A web application for completing and submitting DS-160 nonimmigrant visa applications with MongoDB storage.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- Multi-step form for DS-160 visa application
+- Progress saving and auto-save functionality
+- MongoDB integration for data storage
+- Form validation and error handling
+- Responsive design
 
-**Use Lovable**
+## Tech Stack
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/46f50712-06a9-497b-a089-6323b7c55208) and start prompting.
+- **Frontend**: React with Vite, TypeScript, Tailwind CSS, shadcn/ui
+- **Backend**: Node.js, Express
+- **Database**: MongoDB
+- **Form Handling**: React Hook Form with Zod validation
 
-Changes made via Lovable will be committed automatically to this repo.
+## Project Structure
 
-**Use your preferred IDE**
+```
+├── server/             # Backend server code
+│   ├── index.js        # Express server and MongoDB connection
+│   └── .env            # Environment variables
+│
+├── src/                # Frontend React application
+│   ├── components/     # React components
+│   │   ├── DS160Form.tsx          # Main form component
+│   │   └── FormSteps/             # Individual form step components
+│   │       ├── PersonalInfoForm.tsx
+│   │       ├── ContactInfoForm.tsx
+│   │       ├── PassportInfoForm.tsx
+│   │       └── ...
+│   │
+│   ├── context/        # React context for state management
+│   │   └── FormContext.tsx
+│   │
+│   ├── services/       # API services
+│   │   └── api.ts
+│   │
+│   └── pages/          # Application pages
+│       └── Index.tsx   # Main application page
+```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Setup and Installation
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Prerequisites
 
-Follow these steps:
+- Node.js (v14 or higher)
+- npm or yarn
+- MongoDB (local or Atlas)
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Backend Setup
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+1. Create a `.env` file in the `server` directory with your MongoDB connection string:
 
-# Step 3: Install the necessary dependencies.
-npm i
+```
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/ds160-app
+```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+2. Install dependencies and start the server:
+
+```bash
+cd server
+npm install
+node index.js
+```
+
+The server will start on http://localhost:5000.
+
+### Frontend Setup
+
+1. Install dependencies and start the development server:
+
+```bash
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The application will be available at http://localhost:8080.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## MongoDB Schema
 
-**Use GitHub Codespaces**
+The application uses the following MongoDB schema for storing DS-160 applications:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- **Personal Information**: Name, gender, date of birth, etc.
+- **Contact Information**: Email, phone, address
+- **Passport Information**: Passport number, issue/expiry dates
+- **Travel Information**: Purpose of travel, intended dates
+- **Previous US Travel**: Previous visits to the US
+- **Employment Information**: Current employment details
+- **Education Information**: Educational history
+- **Security Questions**: Required security questions
 
-## What technologies are used for this project?
+## Deployment
 
-This project is built with:
+1. Build the frontend:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```bash
+npm run build
+```
 
-## How can I deploy this project?
+2. Deploy the backend to your preferred hosting service.
+3. Configure environment variables for production.
+4. Connect to a production MongoDB database.
 
-Simply open [Lovable](https://lovable.dev/projects/46f50712-06a9-497b-a089-6323b7c55208) and click on Share -> Publish.
+## License
 
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+MIT
