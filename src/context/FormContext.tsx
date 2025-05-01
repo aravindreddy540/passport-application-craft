@@ -13,9 +13,9 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isLoading, setIsLoading] = useState(false);
 
   const updateFormData = (newData: PartialDS160FormData) => {
-    setFormData((prevData: Partial<DS160FormData>) => ({
+    setFormData((prevData) => ({
       ...prevData,
-      ...newData,
+      ...newData as Partial<DS160FormData>,
     }));
   };
 
