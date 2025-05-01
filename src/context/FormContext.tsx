@@ -36,10 +36,10 @@ export interface DS160FormData {
   intendedStayDuration: number;
   usContactInfo: {
     name: string;
-    organization: string;
+    organization?: string; // Made optional
     relationship: string;
     phone: string;
-    email: string;
+    email?: string; // Made optional
     address: {
       street: string;
       city: string;
@@ -96,9 +96,49 @@ export interface DS160FormData {
   };
 }
 
+// A modified version of the main type that makes all properties optional for partial updates
+export type PartialDS160FormData = {
+  // Previous US Travel with optional nested properties
+  previousUSTravelDetails?: Array<{
+    arrivalDate?: string;
+    departureDate?: string;
+    lengthOfStay?: number;
+  }>;
+  
+  // Education with optional nested properties
+  schools?: Array<{
+    name?: string;
+    address?: {
+      street?: string;
+      city?: string;
+      state?: string;
+      zipCode?: string;
+      country?: string;
+    };
+    courseOfStudy?: string;
+    fromDate?: string;
+    toDate?: string;
+  }>;
+  
+  // Travel info with optional nested properties
+  usContactInfo?: {
+    name?: string;
+    organization?: string;
+    relationship?: string;
+    phone?: string;
+    email?: string;
+    address?: {
+      street?: string;
+      city?: string;
+      state?: string;
+      zipCode?: string;
+    };
+  };
+} & Partial<Omit<DS160FormData, 'previousUSTravelDetails' | 'schools' | 'usContactInfo'>>;
+
 interface FormContextType {
   formData: Partial<DS160FormData>;
-  updateFormData: (data: Partial<DS160FormData>) => void;
+  updateFormData: (data: PartialDS160FormData) => void; // Use our more flexible type
   currentStep: number;
   setCurrentStep: (step: number) => void;
   formId: string | null;
@@ -129,7 +169,7 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [formId, setFormId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const updateFormData = (newData: Partial<DS160FormData>) => {
+  const updateFormData = (newData: PartialDS160FormData) => {
     setFormData(prevData => ({
       ...prevData,
       ...newData,
