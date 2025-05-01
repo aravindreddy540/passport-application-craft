@@ -1,167 +1,10 @@
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-
-// Types for our form data
-export interface DS160FormData {
-  // Personal Information
-  lastName: string;
-  firstName: string;
-  middleName?: string;
-  gender: string;
-  dateOfBirth: string;
-  cityOfBirth: string;
-  countryOfBirth: string;
-  nationality: string;
-  
-  // Contact Information
-  email: string;
-  phone: string;
-  address: {
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
-  };
-  
-  // Passport Information
-  passportNumber: string;
-  passportIssuedCountry: string;
-  passportIssuedDate: string;
-  passportExpiryDate: string;
-  
-  // Travel Information
-  travelPurpose: string;
-  intendedArrivalDate: string;
-  intendedStayDuration: number;
-  usContactInfo: {
-    name: string;
-    organization?: string; // Made optional
-    relationship: string;
-    phone: string;
-    email?: string; // Made optional
-    address: {
-      street: string;
-      city: string;
-      state: string;
-      zipCode: string;
-    };
-  };
-  
-  // Previous US Travel
-  previousUSTravel: boolean;
-  previousUSTravelDetails: Array<{
-    arrivalDate: string;
-    departureDate: string;
-    lengthOfStay: number;
-  }>;
-  
-  // Employment Information
-  employmentStatus: string;
-  employer: {
-    name: string;
-    phone: string;
-    address: {
-      street: string;
-      city: string;
-      state: string;
-      zipCode: string;
-      country: string;
-    };
-  };
-  
-  // Education Information
-  educationLevel: string;
-  schools: Array<{
-    name: string;
-    address: {
-      street: string;
-      city: string;
-      state: string;
-      zipCode: string;
-      country: string;
-    };
-    courseOfStudy: string;
-    fromDate: string;
-    toDate: string;
-  }>;
-  
-  // Security Questions
-  securityQuestions: {
-    criminalOffense: boolean;
-    drugOffense: boolean;
-    terrorism: boolean;
-    visaFraud: boolean;
-    explanations: string;
-  };
-}
-
-// A modified version of the main type that makes all properties optional for partial updates
-export type PartialDS160FormData = {
-  // Previous US Travel with optional nested properties
-  previousUSTravelDetails?: Array<{
-    arrivalDate?: string;
-    departureDate?: string;
-    lengthOfStay?: number;
-  }>;
-  
-  // Education with optional nested properties
-  schools?: Array<{
-    name?: string;
-    address?: {
-      street?: string;
-      city?: string;
-      state?: string;
-      zipCode?: string;
-      country?: string;
-    };
-    courseOfStudy?: string;
-    fromDate?: string;
-    toDate?: string;
-  }>;
-  
-  // Travel info with optional nested properties
-  usContactInfo?: {
-    name?: string;
-    organization?: string;
-    relationship?: string;
-    phone?: string;
-    email?: string;
-    address?: {
-      street?: string;
-      city?: string;
-      state?: string;
-      zipCode?: string;
-    };
-  };
-} & Partial<Omit<DS160FormData, 'previousUSTravelDetails' | 'schools' | 'usContactInfo'>>;
-
-interface FormContextType {
-  formData: Partial<DS160FormData>;
-  updateFormData: (data: PartialDS160FormData) => void; // Use our more flexible type
-  currentStep: number;
-  setCurrentStep: (step: number) => void;
-  formId: string | null;
-  setFormId: (id: string | null) => void;
-  isLoading: boolean;
-  setIsLoading: (loading: boolean) => void;
-}
+import { DS160FormData, PartialDS160FormData } from '../types/formTypes';
+import { FormContextType } from '../types/contextTypes';
+import { initialFormData } from './initialFormData';
 
 const FormContext = createContext<FormContextType | undefined>(undefined);
-
-// Initial form state
-const initialFormData: Partial<DS160FormData> = {
-  previousUSTravel: false,
-  previousUSTravelDetails: [],
-  schools: [],
-  securityQuestions: {
-    criminalOffense: false,
-    drugOffense: false,
-    terrorism: false,
-    visaFraud: false,
-    explanations: '',
-  },
-};
 
 export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [formData, setFormData] = useState<Partial<DS160FormData>>(initialFormData);
@@ -170,7 +13,7 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isLoading, setIsLoading] = useState(false);
 
   const updateFormData = (newData: PartialDS160FormData) => {
-    setFormData(prevData => ({
+    setFormData((prevData: Partial<DS160FormData>) => ({
       ...prevData,
       ...newData,
     }));
@@ -199,3 +42,6 @@ export const useFormContext = () => {
   }
   return context;
 };
+
+// Export types to make them available when importing from FormContext
+export type { DS160FormData, PartialDS160FormData };
